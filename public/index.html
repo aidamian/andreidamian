@@ -1,89 +1,85 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="en">
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/10.13.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/10.13.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/10.13.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/10.13.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/10.13.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/10.13.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/10.13.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/10.13.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/10.13.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/10.13.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andrei Ionut Damian - Professional & Academic Profile</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+<body>
+  <header class="header">
+    <div class="container">
+      <img src="300x300.png" alt="Andrei Ionut Damian" class="profile-img">
+      <h1>Andrei Ionut Damian</h1>
+      <p>AI Expert, Data Scientist, and Technology Innovator</p>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+  </header>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+  <section class="about">
+    <div class="container">
+      <h2>About Me</h2>
+      <p>
+        I am an experienced AI expert with over 25 years in the industry, specializing in AI, Deep Learning, MLOps, and Data Science. With two PhDs in Computer Science/Artificial Intelligence and Project Management, as well as a specialization in AI from Stanford, I have honed my skills across a variety of sectors including distribution, retail, logistics, pharmaceuticals, energy, security, and consumer goods.
+      </p>
+      <p>
+        My career has been marked by a commitment to advancing the field of AI and its applications. As a Senior Lecturer at the Polytechnic University of Bucharest, I impart my knowledge of "Data Science with Deep Learning" to master’s students, fostering the next generation of AI professionals. I am also the founder of Natural.AI, where I explore the intersection of AI and blockchain technology to push the boundaries of what is possible in decentralized AI.
+      </p>
+      <p>
+        My professional journey has included key roles such as Chief Data Scientist at Lummetry.AI, where I specialize in predictive analytics using deep learning, and Founder and CEO of Venture Capital Hub, where I provided consultancy for venture capital and technology startups. My work in these diverse fields has equipped me with a unique perspective and a comprehensive skill set that I bring to every project I undertake.
+      </p>
+    </div>
+  </section>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
+  <section class="resume">
+    <div class="container">
+      <h2>Professional Experience</h2>
+      <ul>
+        <li>
+          <strong>Senior Lecturer</strong> - University Politehnica Bucharest (2018 - Present)
+          <p>Teaching "Data Science with Deep Learning" to master's students.</p>
+        </li>
+        <li>
+          <strong>Founder</strong> - Natural.AI (2024 - Present)
+          <p>Decentralized AI: Exploring the cutting edge of tech between AI and blockchain.</p>
+        </li>
+        <li>
+          <strong>Chief Data Scientist</strong> - Lummetry.AI (2018 - Present)
+          <p>Specializing in predictive analytics using deep learning-based data science.</p>
+        </li>
+        <!-- Add more experiences similarly -->
+      </ul>
+
+      <h2>Education</h2>
+      <ul>
+        <li>
+          <strong>PhD in Computer Science (Deep Learning / Artificial Intelligence)</strong> - Polytechnic University of Bucharest (2016-2021)
+        </li>
+        <li>
+          <strong>Artificial Intelligence Program</strong> - Stanford University SCPD (2019-2021)
+        </li>
+        <li>
+          <strong>PhD in Project Management</strong> - Polytechnic University of Bucharest (2008-2009)
+        </li>
+        <!-- Add more education details similarly -->
+      </ul>
+
+      <h2>Skills</h2>
+      <ul>
+        <li>Deep Learning, MLOps, Data Science</li>
+        <li>Python, R, C++, TensorFlow, PyTorch</li>
+        <li>Project Management, Software Development, Business Strategy</li>
+        <!-- Add more skills similarly -->
+      </ul>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 Andrei Ionut Damian | <a href="https://www.linkedin.com/in/AndreiIonutDamian">LinkedIn</a></p>
+    </div>
+  </footer>
+</body>
+
 </html>
