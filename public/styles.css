@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Charter:wght@400;700&display=swap');
 
 body {
-  font-family: 'Charter', serif;
+  font-family: 'Georgia', serif;
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
@@ -11,6 +10,7 @@ body {
 
 .container {
   width: 80%;
+  max-width: 600px; /* Limits the text width to ensure shorter line lengths */
   margin: auto;
   overflow: hidden;
 }
