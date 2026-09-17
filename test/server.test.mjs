@@ -93,8 +93,58 @@ test('stats remain unavailable before the first complete snapshot', async (t) =>
   const base = await startServer(t);
   const response = await fetch(`${base}/api/purpleray/downloads`);
   assert.deepEqual(await response.json(), {
-    downloads: null, metric: 'package_downloads', updatedAt: null, stale: true
+    downloads: null, metric: 'package_downloads', updatedAt: null, stale: true,
+    releases: null, latestRelease: null
   });
+});
+
+test('platform downloads are rendered from the current cache, including archived macOS and refreshes without restart', async (t) => {
+  const repository = 'https://github.com/aidamian/PurpleRay_SBOM_Analyzer';
+  const packageRelease = (tag, publishedAt, packages) => ({
+    tag, publishedAt, url: `${repository}/releases/tag/${tag}`,
+    assets: packages.map(([name, format, architecture]) => ({
+      name, format, architecture, size: 100,
+      url: `${repository}/releases/download/${tag}/${name}`
+    }))
+  });
+  let snapshot = { downloads: 52, metric: 'package_downloads', stale: false,
+    updatedAt: '2026-09-17T12:00:00Z', latestRelease: { tag: 'v1.3.0' },
+    releases: {
+      windows: packageRelease('v1.3.0', '2026-08-25T17:59:28Z', [['windows.zip', 'zip', 'x64']]),
+      linux: packageRelease('v1.3.0', '2026-08-25T17:59:28Z', [['linux.tar.gz', 'tar.gz', 'x64'], ['linux.deb', 'deb', 'x64']]),
+      macos: packageRelease('v0.1.0', '2026-08-18T16:10:00Z', [['macos.zip', 'zip', null]])
+    }
+  };
+  const base = await startServer(t, {}, { downloadStore: { snapshot: () => snapshot } });
+  let html = await (await fetch(`${base}/purpleray`)).text();
+  for (const platform of Object.values(snapshot.releases)) {
+    for (const asset of platform.assets) assert.ok(html.includes(`href="${asset.url}"`));
+  }
+  assert.match(html, /Archived release:.*v0.1.0/);
+  assert.match(html, /Builds temporarily paused/);
+  assert.match(html, /Download archived ZIP/);
+  assert.match(html, /Experimental archive/);
+  assert.doesNotMatch(html, /<!-- RELEASE_OPTIONS -->/);
+  const vNext = packageRelease('v1.4.0', '2026-09-18T10:00:00Z', [['new-windows.zip', 'zip', 'x64']]);
+  snapshot = { ...snapshot, latestRelease: { tag: 'v1.4.0' }, releases: { ...snapshot.releases, windows: vNext } };
+  html = await (await fetch(`${base}/purpleray`)).text();
+  assert.ok(html.includes(vNext.assets[0].url));
+  assert.ok(!html.includes('/releases/download/v1.3.0/windows.zip'));
+  snapshot = { ...snapshot, stale: true };
+  assert.match(await (await fetch(`${base}/purpleray`)).text(), /Showing the last available package links/);
+});
+
+test('platform options remain usable without an API snapshot and reject unsafe asset links', async (t) => {
+  const base = await startServer(t, {}, { downloadStore: { snapshot: () => ({
+    releases: { windows: { tag: '<img src=x onerror=alert(1)>', assets: [
+      { name: 'bad.zip', format: 'zip', url: 'javascript:alert(1)' }
+    ] } }
+  }) } });
+  const html = await (await fetch(`${base}/purpleray`)).text();
+  for (const name of ['Windows', 'Linux', 'macOS']) assert.ok(html.includes(`<h3>${name}</h3>`));
+  assert.match(html, /\/releases\/latest/);
+  assert.match(html, /Builds temporarily paused/);
+  assert.doesNotMatch(html, /javascript:|onerror=|<img src=x/);
 });
 
 test('supports legacy WAR variables when the new fields are missing or blank', async (t) => {

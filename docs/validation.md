@@ -1,4 +1,30 @@
-Current local validation, 17 September 2026
+Platform download options: local validation, 17 September 2026
+
+All 32 automated tests pass. The release catalog uses GitHub's designated latest
+stable release, preserves older platform packages as explicitly labelled
+archives, rejects unsafe asset URLs, and refreshes atomically with the counter.
+Checks cover backports, missing platforms, pagination, drafts/prereleases,
+rate limits, failed refreshes, server-rendered links, and updates without a
+server restart. The production startup test still runs without DATA_DIR and
+with filesystem writes denied.
+
+A live GitHub refresh returned v1.3.0 Windows ZIP, Linux tar.gz and Debian
+packages, the archived v0.1.0 macOS ZIP, and 52 package downloads. These are
+observations, not hard-coded versions or counts. macOS is marked as paused;
+the archive is labelled experimental. A simulated current macOS package
+replaces that state with a normal download automatically.
+
+Chromium checks passed at 1440, 900, 390, and 320 pixels: all four download links
+matched the GitHub snapshot, cards fit without horizontal overflow, and there
+were no JavaScript errors. Cached links remain visible when API refreshes
+fail, stale results are labelled, and links plus node attribution work with
+JavaScript disabled. Desktop and mobile screenshots were inspected. The
+fallback layout also passed at 770 pixels. `git diff --check` passed.
+
+These platform-download changes are local and ready to publish. The earlier
+site deployment and Cloudflare sitemap repair were separately verified live.
+
+Earlier stateless validation, before the first WAR rollout
 
 The approved version uses GitHub as the source of truth and caches results in
 memory on each replica. All 22 current tests pass, including deleted-asset/count

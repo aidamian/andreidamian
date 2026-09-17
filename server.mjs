@@ -4,6 +4,7 @@ import { posix } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import express from 'express';
 import { renderNodeAttribution } from './lib/ratio1-node.mjs';
+import { renderReleaseOptions, releaseStatus } from './public/purpleray/downloads.js';
 
 const publicDirectory = fileURLToPath(new URL('./public/', import.meta.url));
 
@@ -11,7 +12,9 @@ const unavailableDownloads = {
   downloads: null,
   metric: 'package_downloads',
   updatedAt: null,
-  stale: true
+  stale: true,
+  releases: null,
+  latestRelease: null
 };
 
 export async function createApp(env = process.env, { downloadStore } = {}) {
@@ -64,7 +67,15 @@ export async function createApp(env = process.env, { downloadStore } = {}) {
       return response.set('Cache-Control', 'no-store').redirect(308, `/purpleray${query}`);
     }
     if (pages.has(pathname)) {
-      return response.set('Cache-Control', 'no-store').type('html').send(pages.get(pathname));
+      let html = pages.get(pathname);
+      if (pathname === '/purpleray') {
+        const snapshot = downloadStore?.snapshot() || unavailableDownloads;
+        html = html.replace(/<!-- RELEASE_OPTIONS -->[\s\S]*?<!-- \/RELEASE_OPTIONS -->/,
+          () => renderReleaseOptions(snapshot));
+        html = html.replace(/(<p id="release-status"[^>]*>)[\s\S]*?(<\/p>)/,
+          (_match, opening, closing) => `${opening}${releaseStatus(snapshot)}${closing}`);
+      }
+      return response.set('Cache-Control', 'no-store').type('html').send(html);
     }
     // Never serve an unrendered HTML template through static middleware.
     if (posix.extname(pathname).toLowerCase() === '.html') {

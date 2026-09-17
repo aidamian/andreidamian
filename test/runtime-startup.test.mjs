@@ -15,11 +15,16 @@ test('WAR starts and serves a complete counter without DATA_DIR or filesystem wr
   const repository = fileURLToPath(new URL('../', import.meta.url));
   const fixture = 'data:text/javascript,' + encodeURIComponent(`
     if (process.permission.has('fs.write')) throw new Error('Test must forbid disk writes');
-    globalThis.fetch = async (url) => new Response(JSON.stringify(
-      new URL(url).pathname.endsWith('/assets')
-        ? [{ id: 1, name: 'purpleray-sbom-analyzer-v1.3.0-windows-x64.zip', download_count: 7 }]
-        : [{ id: 1, draft: false, prerelease: false }]
-    ));
+    const release = { id: 1, draft: false, prerelease: false, tag_name: 'v1.3.0',
+      published_at: '2026-08-25T17:59:28Z' };
+    globalThis.fetch = async (url) => {
+      const pathname = new URL(url).pathname;
+      return new Response(JSON.stringify(pathname.endsWith('/latest') ? release
+        : pathname.endsWith('/assets') ? [{ id: 1,
+          name: 'purpleray-sbom-analyzer-v1.3.0-windows-x64.zip', download_count: 7, size: 100,
+          browser_download_url: 'https://github.com/aidamian/PurpleRay_SBOM_Analyzer/releases/download/v1.3.0/purpleray-sbom-analyzer-v1.3.0-windows-x64.zip'
+        }] : [release]));
+    };
   `);
   const child = spawn(process.execPath, [
     '--permission', `--allow-fs-read=${repository}`, '--import', fixture,
@@ -74,5 +79,8 @@ test('WAR starts and serves a complete counter without DATA_DIR or filesystem wr
   assert.equal(stats.downloads, 7);
   assert.equal(stats.stale, false);
   assert.equal(stats.metric, 'package_downloads');
+  assert.equal(stats.latestRelease.tag, 'v1.3.0');
+  assert.equal(stats.releases.windows.assets[0].format, 'zip');
+  assert.match(await (await fetch(`${base}/purpleray`)).text(), /releases\/download\/v1.3.0\/purpleray-sbom-analyzer-v1.3.0-windows-x64.zip/);
   assert.doesNotMatch(output, /ERR_ACCESS_DENIED/);
 });

@@ -79,8 +79,17 @@ The server adds content versions to stylesheet and counter-script URLs, so an
 update bypasses older browser and Cloudflare cache entries automatically.
 [WAR environment fields](https://github.com/Ratio1/edge_node/blob/main/extensions/business/container_apps/container_utils.py).
 
-The PurpleRay button links to GitHub's permanent `releases/latest` URL. Its
-counter refreshes hourly and counts application-package downloads across
+PurpleRay offers Windows, Linux, and macOS download options. Package links and
+versions come from published GitHub assets and refresh with the hourly cache;
+they do not follow unreleased changes in the source repository. Windows ZIPs,
+Linux archives and Debian packages, and available macOS ZIPs link directly to
+GitHub. Older platform packages are explicitly marked as archives; macOS shows
+the build pause while its available package predates the current release.
+The permanent `releases/latest` link remains available if GitHub cannot refresh.
+The server renders cached package links without JavaScript, and the browser
+also updates them from the same API used by the download counter.
+
+The counter refreshes hourly and counts application-package downloads across
 published releases, including prereleases. Checksums, manifests, and automatic
 source archives are excluded. Downloads include direct GitHub downloads, not
 just clicks from this site, and do not represent unique people.

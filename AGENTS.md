@@ -10,7 +10,7 @@
 ## Content and verification
 
 - Keep profile claims aligned with the CV sources recorded in `docs/migration-proposal.md`.
-- Ground PurpleRay descriptions and screenshot captions in its public repository. Keep the download button pointed at its permanent GitHub `releases/latest` URL.
+- Ground PurpleRay descriptions and screenshot captions in its public repository. Offer direct platform packages discovered from published GitHub release assets, retaining the permanent `releases/latest` link as a fallback. Identify older packages as archives and show the macOS build pause when no current package exists.
 - Count current GitHub application-package downloads across all published releases, including prereleases. GitHub is the source of truth; refresh hourly in memory on each replica. Deleted assets may reduce the total. Do not describe downloads as unique users or an immutable lifetime count.
 - Run focused server/counter tests for behavior changes. Check both pages at desktop and mobile sizes after visual changes, including long node names, screenshot captions, and unavailable statistics.
 - HTML includes the responding node's escaped runtime identity and must remain uncached. Do not let static-file routes bypass HTML rendering.
