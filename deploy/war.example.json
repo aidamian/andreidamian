@@ -1,0 +1,46 @@
+{
+  "IMAGE": "node:24-alpine",
+  "VCS_DATA": {
+    "PROVIDER": "github",
+    "REPO_URL": "https://github.com/aidamian/andreidamian",
+    "BRANCH": "main",
+    "TOKEN": "<inject-read-only-website-repository-token>",
+    "POLL_INTERVAL": 300
+  },
+  "BUILD_AND_RUN_COMMANDS": [
+    "npm ci --omit=dev",
+    "npm start"
+  ],
+  "ENV": {
+    "NODE_ENV": "production",
+    "PORT": "8080",
+    "DATA_DIR": "/data",
+    "GITHUB_TOKEN": "<inject-read-only-github-statistics-token>"
+  },
+  "CONTAINER_RESOURCES": {
+    "cpu": 0.25,
+    "gpu": 0,
+    "memory": "512m",
+    "storage": "1948m"
+  },
+  "TUNNEL_ENGINE_ENABLED": true,
+  "EXPOSED_PORTS": {
+    "8080": {
+      "is_main_port": true,
+      "engine": "cloudflare",
+      "protocol": "http",
+      "token": "<retain-existing-cloudflare-tunnel-token>"
+    }
+  },
+  "FIXED_SIZE_VOLUMES": {
+    "stats": {
+      "SIZE": "100M",
+      "MOUNTING_POINT": "/data"
+    }
+  },
+  "HEALTH_CHECK": {
+    "MODE": "endpoint",
+    "PATH": "/healthz",
+    "ON_FAILURE": "skip"
+  }
+}

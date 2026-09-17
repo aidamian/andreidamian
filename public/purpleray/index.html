@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PurpleRay is an open-source desktop SBOM analyzer for Windows and Linux. Scan local software, export CycloneDX, compare scans, and optionally check OSV advisories.">
+  <meta name="theme-color" content="#f8f7f3">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PurpleRay — Open-source SBOM Analyzer">
+  <meta property="og:description" content="Know what’s in your software. A native desktop SBOM analyzer for Windows and Linux, offline by default.">
+  <meta property="og:url" content="https://andreidamian.ro/purpleray">
+  <meta property="og:image" content="https://andreidamian.ro/purpleray/application-overview.png">
+  <title>PurpleRay — Open-source SBOM Analyzer</title>
+  <link rel="canonical" href="https://andreidamian.ro/purpleray">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/purpleray/downloads.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header container">
+    <a class="site-name" href="/">Andrei Damian<span class="name-dot" aria-hidden="true">.</span></a>
+    <nav aria-label="Main navigation">
+      <a href="/">Profile</a>
+      <a href="/purpleray" aria-current="page">PurpleRay</a>
+      <a href="https://github.com/aidamian/PurpleRay_SBOM_Analyzer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+    <section class="product-hero" aria-labelledby="product-title">
+      <p class="eyebrow">PurpleRay / SBOM Analyzer</p>
+      <h1 id="product-title">Know what’s in<br><em>your software.</em></h1>
+      <p class="hero-description">A small, native desktop application that turns local software artifacts into a software bill of materials. Inspect components, compare scans, and export CycloneDX.</p>
+      <div class="button-row">
+        <a class="button button-primary" href="https://github.com/aidamian/PurpleRay_SBOM_Analyzer/releases/latest">Download latest release <span aria-hidden="true">↗</span></a>
+        <a class="button button-secondary" href="https://github.com/aidamian/PurpleRay_SBOM_Analyzer">View source on GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+      <p class="platform-note">Windows x64 · Linux x64 · Open source · Apache-2.0</p>
+    </section>
+
+    <figure class="product-overview">
+      <a class="screenshot-frame" href="/purpleray/application-overview.png" aria-label="View the PurpleRay dashboard screenshot at full size">
+        <img src="/purpleray/application-overview.png" alt="PurpleRay dashboard showing local scan history, component totals, and the offline Knowledge Base" width="1180" height="720" fetchpriority="high">
+      </a>
+      <figcaption class="screenshot-caption"><strong>A local overview.</strong> Dashboard screenshot from v1.2.2, using synthetic demo data. No live advisory query was made. Select any screenshot to view it at full size.</figcaption>
+    </figure>
+
+    <section class="section-block" aria-labelledby="features-title">
+      <div class="section-heading">
+        <p class="eyebrow">From files to an inventory</p>
+        <h2 id="features-title">A software inventory you can inspect.</h2>
+      </div>
+      <div class="feature-grid">
+        <article>
+          <span class="feature-number" aria-hidden="true">01</span>
+          <h3>Scan locally</h3>
+          <p>Read package manifests, lock files, and native binaries. Scans run offline by default and never execute files in the selected folder.</p>
+        </article>
+        <article>
+          <span class="feature-number" aria-hidden="true">02</span>
+          <h3>Review what changed</h3>
+          <p>Explore components and their evidence, compare completed scans, and review known issues through an optional OSV.dev check.</p>
+        </article>
+        <article>
+          <span class="feature-number" aria-hidden="true">03</span>
+          <h3>Export useful evidence</h3>
+          <p>Produce a deterministic CycloneDX SBOM, export security findings, and inspect a BSI readiness report to see where inventory evidence is incomplete.</p>
+        </article>
+      </div>
+      <p class="details-note">Online advisory checks are optional and require confirmation each time. They send only eligible, versioned Package URLs to OSV.dev. Readiness reporting helps review the evidence; it does not certify compliance.</p>
+    </section>
+
+    <section id="screenshots" class="section-block" aria-labelledby="screenshots-title">
+      <div class="section-heading">
+        <p class="eyebrow">Inside PurpleRay</p>
+        <h2 id="screenshots-title">The details, in view.</h2>
+        <p class="gallery-description">A component inventory and a scan report keep the underlying evidence close at hand. These screenshots use synthetic illustrative data; no live advisory query was made.</p>
+      </div>
+      <div class="screenshots-grid">
+        <figure>
+          <a class="screenshot-frame" href="/purpleray/components-known-issues.png" aria-label="View the components and known issues screenshot at full size">
+            <img src="/purpleray/components-known-issues.png" alt="PurpleRay component table with package names, versions, and known-issue indicators in a synthetic demonstration" width="1180" height="720" loading="lazy" decoding="async">
+          </a>
+          <figcaption class="screenshot-caption"><strong>Components &amp; known issues.</strong> Review the inventory and recorded advisory indicators. Synthetic demo data.</figcaption>
+        </figure>
+        <figure>
+          <a class="screenshot-frame" href="/purpleray/scan-details.png" aria-label="View the scan details screenshot at full size">
+            <img src="/purpleray/scan-details.png" alt="PurpleRay scan details report showing an inventory summary, evidence, and warnings for a synthetic scan" width="1180" height="720" loading="lazy" decoding="async">
+          </a>
+          <figcaption class="screenshot-caption"><strong>Scan details.</strong> Inspect the report and the context behind the results. Synthetic demo data.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="download" class="download-panel" aria-labelledby="download-title">
+      <div>
+        <p class="eyebrow">Get PurpleRay</p>
+        <h2 id="download-title">Start with a folder.</h2>
+        <p class="download-description">Choose the Windows or Linux package from the latest GitHub release. Installation instructions and checksums are included in the project documentation.</p>
+        <a class="button button-primary" href="https://github.com/aidamian/PurpleRay_SBOM_Analyzer/releases/latest">Download latest release <span aria-hidden="true">↗</span></a>
+        <p class="platform-note">Linux requires GTK2. WSL2 is supported with WSLg.</p>
+      </div>
+      <div id="download-stat" class="download-stat" data-state="idle">
+        <div aria-live="polite" aria-atomic="true" id="download-live">
+          <span id="download-total" class="download-total">—</span>
+          <p class="download-label">Package downloads across all versions</p>
+          <p id="download-status" class="download-status">The latest release is always available on GitHub.</p>
+        </div>
+        <noscript><p class="download-status">Enable JavaScript to view download statistics.</p></noscript>
+        <p class="metric-note">Recorded GitHub package downloads, including prereleases. Excludes metadata and source archives; downloads are not unique users. Deleted assets retain their last observed count. Downloads of assets deleted before tracking began cannot be recovered.</p>
+      </div>
+    </section>
+
+    <aside class="project-links" aria-label="Project resources">
+      <p>Created by <a href="/">Andrei Ionuț Damian</a>. PurpleRay is open source under the Apache License 2.0. Bug reports and contributions are welcome on GitHub.</p>
+      <div class="link-row">
+        <a class="text-link" href="https://github.com/aidamian/PurpleRay_SBOM_Analyzer#readme">Documentation <span aria-hidden="true">↗</span></a>
+        <a class="text-link" href="https://github.com/aidamian/PurpleRay_SBOM_Analyzer/issues">Report an issue <span aria-hidden="true">↗</span></a>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="site-footer container">
+    <div class="footer-top">
+      <p>PurpleRay<span class="name-dot">.</span></p>
+      <div class="footer-links">
+        <a href="/">Andrei Damian</a>
+        <a href="https://github.com/aidamian/PurpleRay_SBOM_Analyzer">GitHub</a>
+        <a href="https://github.com/aidamian/PurpleRay_SBOM_Analyzer/blob/main/LICENSE">Apache-2.0</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Andrei Ionuț Damian</p>
+      <p class="node-attribution"><!-- RATIO1_NODE -->Node information unavailable<!-- /RATIO1_NODE --></p>
+    </div>
+  </footer>
+</body>
+</html>
