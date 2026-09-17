@@ -1,11 +1,14 @@
 Website migration record, 17 September 2026
 
-The owner approved the full refresh after the initial review and has already
-published the earlier website through Ratio1 Worker App Runner (WAR), with its
-domains configured. This record preserves the content sources and architectural
-decisions. [README.md](../README.md) contains the current run and deployment
-instructions. Local implementation and repository cleanup do not imply that the
-new code has been published or that external hosting resources have been retired.
+The owner approved the full refresh after the initial review and published
+commit `4e6ffd1` through Ratio1 Worker App Runner (WAR), with its domains already
+configured. A subsequent inspection found both website replicas on that commit
+but still running the earlier static-server command. The owner then approved
+keeping both replicas and using GitHub as the download counter's source of
+truth, with an in-memory cache and no application volume. This record preserves
+the content sources and decisions. [README.md](../README.md) contains the current
+run and manual deployment instructions. Repository changes do not automatically
+update the existing Deeploy job configuration or retire external resources.
 
 The initial audit found a static personal homepage whose hosting rewrites sent
 `/purpleray` and unknown paths to the same HTML with status 200. That audit
@@ -60,32 +63,36 @@ not website constants. [Releases API](https://docs.github.com/en/rest/releases/r
 
 The server refreshes the aggregate hourly, following all release and asset
 pagination. It publishes a snapshot only after a complete successful refresh.
-The private `purpleray-downloads.json` ledger keeps each asset ID's highest
-observed package count after deletion. Failed refreshes retain the previous
-snapshot and timestamp. The endpoint `/api/purpleray/downloads` returns
+Each replica caches its snapshot in memory and fetches again after restart.
+Failed refreshes retain that process's previous snapshot and timestamp. The
+endpoint `/api/purpleray/downloads` returns
 `downloads`, `metric`, `updatedAt`, and `stale`; before the first successful
 refresh, the count and timestamp are null.
 
 This metric includes direct GitHub asset downloads and does not identify unique
-people or installations. GitHub cannot reconstruct counts for assets deleted
-before tracking, or downloads between their last observation and deletion.
+people or installations. GitHub is the source of truth: removing release assets
+can reduce the total, and the site does not preserve deleted-asset history.
 Automatically generated source archives do not expose these asset counters.
-Retain release assets where possible and capture counts before intentional
-removal. Both application API requests and WAR branch polling need credentials:
-`GITHUB_TOKEN` and `VCS_DATA.TOKEN` are separate configuration fields. Poll WAR's
-branch every 300 seconds. [Rate limits](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api),
+Independent refresh times can briefly produce different totals on the two
+replicas. `GITHUB_TOKEN` is optional but recommended to avoid the shared
+unauthenticated API limit. It is separate from WAR's existing `VCS_DATA.TOKEN`.
+The current Deeploy UI uses the runner's default 60-second branch polling.
+[Rate limits](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api),
 [WAR source](https://github.com/Ratio1/edge_node/blob/main/extensions/business/container_apps/worker_app_runner.py).
 
-One Node/Express service handles the homepage, `/purpleray`, and cached
-statistics. It has no frontend build or database. MICRO's 0.25 CPU and 512 MiB
-RAM are the starting resource target, subject to verification on the selected
-node. Reserve 100 MiB for the ledger within its 2 GiB storage allowance: the WAR
-example specifies `1948m` container storage plus a `100M` fixed volume at `/data`.
-Local development uses `.data/`; WAR requires a writable dedicated mount outside
-its `/app` checkout. Back up before changing the node or pipeline/instance
-identity. Additional replicas would each have their own ledger and require a
-shared-state design. [Resource definitions](https://github.com/Ratio1/edge_node/blob/main/extensions/business/deeploy/deeploy_const.py),
-[volume implementation](https://github.com/Ratio1/edge_node/blob/main/extensions/business/container_apps/mixins/fixed_size_volumes.py).
+One Node/Express application handles the homepage, `/purpleray`, and cached
+statistics. Keep job 69's existing replicas on `bia1` and `bia2`, each using
+MICRO's 0.25 CPU, 512 MiB RAM, and 2 GiB storage. The application has no frontend
+build, database, or persistent volume. It requires no `DATA_DIR`; WAR's own
+`/r1en_system` mount remains in place. Runtime limits still need verification on
+the deployed application.
+[Resource definitions](https://github.com/Ratio1/edge_node/blob/main/extensions/business/deeploy/deeploy_const.py).
+
+The initial proposal used a private download ledger on a fixed-size volume and
+recommended one replica. The owner's later decision supersedes that proposal:
+retain two replicas, recalculate from current GitHub assets, and accept that
+deleted assets can reduce the count. The earlier volume, backup, and mount-check
+instructions are no longer deployment requirements.
 
 The serving node's identity is rendered into both HTML footers from
 `R1EN_HOST_ID` and `R1EN_HOST_ADDR`, falling back to their `EE_` equivalents.
@@ -111,12 +118,16 @@ The owner has already configured the domains; retain them during this update.
 
 Remaining deployment operations:
 
-1. Publish the reviewed repository changes to the intended watched branch and
-   update the existing WAR job to `node:24-alpine`, `npm ci --omit=dev`, then
-   `npm start`. Add `/data`, `DATA_DIR`, and the secrets from the example. Keep the
-   existing job and tunnel identities.
-2. Verify startup, both pages, node footers, `/healthz`, 404s, canonical redirects,
-   and counter recovery after restart. Check the selected MICRO limits and
+1. Publish the revised server code to the watched branch and edit existing WAR
+   job 69. Keep `node:24-alpine`, both nodes, and the existing domains. Replace
+   `npx serve` with `npm ci --omit=dev`, then `npm start`; set `NODE_ENV=production`
+   and `PORT=8080`. Add `GITHUB_TOKEN` as a secret if available, preserving the
+   existing secrets and tunnel configuration. Add no application volume.
+2. Configure endpoint readiness at `/healthz`, timeout 300 seconds, with
+   `ON_FAILURE=skip`. If startup times out, diagnose and fix it, then restart the
+   job to retry readiness. Verify startup, both pages, both node identities,
+   `/healthz`, 404s, canonical redirects, and fresh statistics after a restart.
+   Check the selected MICRO limits and
    confirm Cloudflare does not override the pages' `no-store` headers.
 3. After confirming the new deployment, retire the old external hosting resources
    described below. The checked-in Actions workflow runs tests only.
@@ -129,4 +140,4 @@ key, detach the old custom domain, and retire Hosting plus preview channels.
 Check the purpose of any verification DNS records before removing them. Delete
 the broader Firebase/GCP project only if no other service uses it. This work has
 not removed remote secrets, changed Cloudflare settings, deleted hosting
-resources, or deployed the new application.
+resources, or applied the new application startup settings.

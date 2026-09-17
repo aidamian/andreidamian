@@ -69,6 +69,26 @@ test('stats requests return the cached result without triggering upstream refres
   assert.equal(refreshes, 0);
 });
 
+test('pages bypass previously cached assets with stable versioned URLs', async (t) => {
+  const base = await startServer(t);
+  const home = await (await fetch(base)).text();
+  const project = await (await fetch(`${base}/purpleray`)).text();
+  const homeCss = home.match(/href="(\/styles\.css\?v=[a-f0-9]+)"/)?.[1];
+  const projectCss = project.match(/href="(\/styles\.css\?v=[a-f0-9]+)"/)?.[1];
+  const script = project.match(/src="(\/purpleray\/downloads\.js\?v=[a-f0-9]+)"/)?.[1];
+  assert.ok(homeCss, 'the stylesheet must have a new cache key');
+  assert.equal(projectCss, homeCss);
+  assert.ok(script, 'the counter script must have a new cache key');
+  const cachedCopies = new Map([['/styles.css', 'obsolete stylesheet'], ['/purpleray/downloads.js', 'obsolete script']]);
+  for (const asset of [homeCss, script]) {
+    assert.equal(cachedCopies.has(asset), false);
+    const response = await fetch(`${base}${asset}`);
+    assert.equal(response.status, 200);
+    assert.equal(await response.text(), await (await fetch(`${base}${asset.split('?')[0]}`)).text());
+  }
+  assert.equal((await (await fetch(base)).text()).match(/href="(\/styles\.css\?v=[a-f0-9]+)"/)?.[1], homeCss);
+});
+
 test('stats remain unavailable before the first complete snapshot', async (t) => {
   const base = await startServer(t);
   const response = await fetch(`${base}/api/purpleray/downloads`);

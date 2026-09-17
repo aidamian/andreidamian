@@ -4,8 +4,7 @@
     "PROVIDER": "github",
     "REPO_URL": "https://github.com/aidamian/andreidamian",
     "BRANCH": "main",
-    "TOKEN": "<inject-read-only-website-repository-token>",
-    "POLL_INTERVAL": 300
+    "TOKEN": "<retain-existing-website-repository-token>"
   },
   "BUILD_AND_RUN_COMMANDS": [
     "npm ci --omit=dev",
@@ -14,14 +13,13 @@
   "ENV": {
     "NODE_ENV": "production",
     "PORT": "8080",
-    "DATA_DIR": "/data",
     "GITHUB_TOKEN": "<inject-read-only-github-statistics-token>"
   },
   "CONTAINER_RESOURCES": {
     "cpu": 0.25,
     "gpu": 0,
     "memory": "512m",
-    "storage": "1948m"
+    "storage": "2g"
   },
   "TUNNEL_ENGINE_ENABLED": true,
   "EXPOSED_PORTS": {
@@ -32,15 +30,10 @@
       "token": "<retain-existing-cloudflare-tunnel-token>"
     }
   },
-  "FIXED_SIZE_VOLUMES": {
-    "stats": {
-      "SIZE": "100M",
-      "MOUNTING_POINT": "/data"
-    }
-  },
   "HEALTH_CHECK": {
     "MODE": "endpoint",
     "PATH": "/healthz",
+    "TIMEOUT": 300,
     "ON_FAILURE": "skip"
   }
 }

@@ -1,9 +1,9 @@
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { posix } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import express from 'express';
 import { renderNodeAttribution } from './lib/ratio1-node.mjs';
-import { prepareDataDirectory } from './lib/runtime-data.mjs';
 
 const publicDirectory = fileURLToPath(new URL('./public/', import.meta.url));
 
@@ -16,9 +16,18 @@ const unavailableDownloads = {
 
 export async function createApp(env = process.env, { downloadStore } = {}) {
   const app = express();
+  const assets = await Promise.all(['/styles.css', '/purpleray/downloads.js'].map(async (path) => {
+    const contents = await readFile(new URL(`./public${path}`, import.meta.url));
+    const version = createHash('sha256').update(contents).digest('hex').slice(0, 16);
+    return [path, `${path}?v=${version}`];
+  }));
   const routes = [['/', 'index.html'], ['/purpleray', 'purpleray/index.html']];
   const pages = new Map(await Promise.all(routes.map(async ([route, file]) => {
-    const template = await readFile(new URL(`./public/${file}`, import.meta.url), 'utf8');
+    let template = await readFile(new URL(`./public/${file}`, import.meta.url), 'utf8');
+    // A new asset URL bypasses edge/browser copies from earlier deployments.
+    for (const [path, versioned] of assets) {
+      template = template.replaceAll(`"${path}"`, `"${versioned}"`);
+    }
     return [route, template.replace(
       /<!-- RATIO1_NODE -->[\s\S]*?<!-- \/RATIO1_NODE -->/,
       () => renderNodeAttribution(env)
@@ -93,11 +102,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   }
 
   const { createDownloadStore } = await import('./lib/github-downloads.mjs');
-  const dataDir = await prepareDataDirectory();
-  const downloadStore = await createDownloadStore({ dataDir, token: process.env.GITHUB_TOKEN });
+  const downloadStore = await createDownloadStore({ token: process.env.GITHUB_TOKEN });
   const app = await createApp(process.env, { downloadStore });
   const refresh = () => downloadStore.refresh().catch(() => {
-    console.warn('Download statistics refresh failed; keeping the last saved snapshot.');
+    console.warn('Download statistics refresh failed; keeping the last cached snapshot.');
   });
   // The store gates hourly refreshes and retry backoff; check once a minute.
   const timer = setInterval(refresh, 60 * 1000);

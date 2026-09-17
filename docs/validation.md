@@ -1,4 +1,31 @@
-Local validation, 17 September 2026
+Current local validation, 17 September 2026
+
+The approved version uses GitHub as the source of truth and caches results in
+memory on each replica. All 22 current tests pass, including deleted-asset/count
+changes, independent replica convergence, restart refetch, pagination, partial
+failure handling, backoff, node attribution, and versioned asset URLs.
+
+An integration test starts the production server with injected WAR identity,
+no DATA_DIR, and filesystem writes denied by Node's permission model. Health,
+both pages, and a complete mocked counter succeed without a writable directory.
+A separate local run with writes denied completed a live GitHub refresh and
+returned 52 package downloads. That observation is not a hard-coded value.
+
+Chromium checks of the revised server passed at 1440 and 320 pixels: versioned
+CSS and all images loaded, layouts fit the viewport, the counter reached its
+ready state, and both footers rendered the injected node. Release links and
+node attribution also worked with JavaScript disabled. No JavaScript exceptions
+were observed. `git diff --check` passed. The revised code has not yet been
+published or tested inside the production WAR; follow README's rollout steps.
+
+Earlier local validation, 17 September 2026
+
+These results cover the earlier implementation with a persistent download
+ledger, before the owner approved two replicas with in-memory GitHub snapshots.
+The 25-test result and resource measurements below are historical evidence;
+they do not validate the revised cache or the final live deployment. Current
+deployment settings are in [README.md](../README.md) and
+[war.example.json](../deploy/war.example.json).
 
 The refresh passed 25 automated tests covering runtime node attribution,
 canonical routes, private-file isolation, persistent-data configuration, and
@@ -26,9 +53,8 @@ WSL environment.
 | Mixed HTTP load: 500 requests, concurrency 20 | 500 successful responses in 2.6 seconds; p95 about 260 ms |
 | Serving process during load and browser checks | Peak RSS about 69 MiB |
 
-The live total was saved to a private temporary ledger for the review. It is not
-a hard-coded website value or committed production state. A new WAR volume
-starts its own ledger on the first successful refresh. Verify the actual WAR
-mount, startup, node identity, counter recovery after restart, and Cloudflare
-cache behavior after publishing. Deployment settings are in
-[README.md](../README.md) and [war.example.json](../deploy/war.example.json).
+The live total was saved to a private temporary ledger for that review. It was
+not a hard-coded website value or committed production state. The owner has
+since removed the persistent-ledger requirement. After the current local checks,
+verify actual WAR startup, both node identities, statistics refetch after
+restart, and Cloudflare cache behavior after updating job 69.

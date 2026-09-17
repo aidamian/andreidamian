@@ -1,7 +1,4 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import test from 'node:test';
 import { createDownloadStore } from '../lib/github-downloads.mjs';
 
@@ -14,20 +11,18 @@ const response = (body, headers = {}, status = 200) =>
 const next = (endpoint, page = 2) => `<${endpoint}?per_page=100&page=${page}>; rel="next"`;
 
 async function fixture(t, fetchImpl, options = {}) {
-  const dataDir = await mkdtemp(join(tmpdir(), 'purpleray-downloads-'));
   const clock = { time: Date.parse('2026-09-17T12:00:00Z') };
   const stores = [];
   const create = async (overrides = {}) => {
-    const store = await createDownloadStore({ dataDir, fetchImpl, now: () => clock.time,
+    const store = await createDownloadStore({ fetchImpl, now: () => clock.time,
       ...options, ...overrides });
     stores.push(store);
     return store;
   };
   t.after(async () => {
     for (const store of stores) await store.close();
-    await rm(dataDir, { recursive: true, force: true });
   });
-  return { dataDir, clock, create, store: await create() };
+  return { clock, create, store: await create() };
 }
 
 test('starts unavailable and counts historical/current packages, prereleases, and every pagination page', async (t) => {
@@ -70,33 +65,38 @@ test('starts unavailable and counts historical/current packages, prereleases, an
   assert.equal(calls.length, 104, 'a fresh cache suppresses another traversal');
 });
 
-test('retains highest observed counts for deleted/replaced assets and survives a restart', async (t) => {
+test('recomputes lower GitHub totals after deletion/reset and independent replicas converge', async (t) => {
   let current = [asset(1, 10), asset(2, 4)];
   let calls = 0;
-  const { store, create, clock, dataDir } = await fixture(t, async (url) => {
+  const { store, create, clock } = await fixture(t, async (url) => {
     calls++;
     return response(new URL(url).pathname.endsWith('/releases') ? [release(1)] : current);
   });
   assert.equal((await store.refresh()).downloads, 14);
+  const replica = await create();
+  assert.equal(replica.snapshot().downloads, null);
+  assert.equal((await replica.refresh()).downloads, 14);
   current = [asset(1, 8), asset(3, 2)];
   clock.time += 3_600_000;
-  assert.equal((await store.refresh()).downloads, 16);
+  assert.equal((await store.refresh()).downloads, 10);
+  assert.equal(replica.snapshot().downloads, 14, 'each replica keeps its own temporary cache');
+  assert.equal((await replica.refresh()).downloads, 10);
   await store.close();
   const restarted = await create();
-  assert.equal(restarted.snapshot().downloads, 16);
+  assert.deepEqual(restarted.snapshot(), { downloads: null, metric: 'package_downloads', updatedAt: null, stale: true });
+  assert.equal((await restarted.refresh()).downloads, 10);
   assert.equal((await restarted.refresh()).stale, false);
-  assert.equal(calls, 4, 'a fresh persisted ledger also suppresses startup fetches');
+  assert.equal(calls, 10, 'a restarted instance fetches GitHub instead of inheriting a cache');
   current = [];
   clock.time += 3_600_000;
-  assert.equal((await restarted.refresh()).downloads, 16);
-  const ledger = JSON.parse(await readFile(join(dataDir, 'purpleray-downloads.json'), 'utf8'));
-  assert.deepEqual(Object.keys(ledger.assets), ['1', '2', '3']);
+  assert.equal((await restarted.refresh()).downloads, 0);
+  assert.equal((await replica.refresh()).downloads, 0);
 });
 
-test('never publishes partial pages and keeps failures stale with a retry delay across restart', async (t) => {
+test('never publishes partial pages and retains the last complete in-memory result during retry backoff', async (t) => {
   let failing = false;
   let calls = 0;
-  const { store, clock, create } = await fixture(t, async (url) => {
+  const { store, clock } = await fixture(t, async (url) => {
     calls++;
     if (new URL(url).pathname.endsWith('/releases')) return response([release(1)]);
     if (!failing) return response([asset(1, 10)]);
@@ -109,13 +109,10 @@ test('never publishes partial pages and keeps failures stale with a retry delay 
   assert.deepEqual(await store.refresh(), { ...initial, stale: true });
   assert.equal(calls, 5);
   assert.deepEqual(await store.refresh(), { ...initial, stale: true });
-  await store.close();
-  const restarted = await create();
-  assert.deepEqual(await restarted.refresh(), { ...initial, stale: true });
   assert.equal(calls, 5);
   clock.time += 300_000;
   failing = false;
-  assert.equal((await restarted.refresh()).stale, false);
+  assert.equal((await store.refresh()).stale, false);
 });
 
 test('a first failed fetch stays unavailable rather than becoming zero', async (t) => {
@@ -228,34 +225,11 @@ test('invalid or duplicate asset data cannot replace a successful cached result'
   }
 });
 
-test('a persistence error leaves the last complete in-memory total unchanged', async (t) => {
-  let count = 1;
-  const { store, dataDir, clock } = await fixture(t, async (url) =>
-    response(new URL(url).pathname.endsWith('/releases') ? [release(1)] : [asset(1, count)]));
-  await store.refresh();
-  const path = join(dataDir, 'purpleray-downloads.json');
-  await rm(path);
-  await mkdir(path);
-  count = 99;
-  clock.time += 3_600_000;
-  assert.equal((await store.refresh()).downloads, 1);
-  assert.equal(store.snapshot().stale, true);
-});
-
-test('rejects corrupt or unsupported ledgers without resetting observed history', async (t) => {
-  const { dataDir } = await fixture(t, async () => response([]));
-  const path = join(dataDir, 'purpleray-downloads.json');
-  const valid = { version: 1, updatedAt: '2026-09-17T12:00:00.000Z',
-    assets: { 1: { name: asset(1).name, downloads: 1 } }, retryAt: 0, failed: false };
-  for (const invalid of [
-    '{bad JSON', JSON.stringify({ ...valid, version: 2 }),
-    JSON.stringify({ ...valid, updatedAt: null }),
-    JSON.stringify({ ...valid, updatedAt: 'invalid-date' }),
-    JSON.stringify({ ...valid, assets: { 1: { name: asset(1).name, downloads: -1 } } }),
-    JSON.stringify({ ...valid, assets: { 1: { name: 'SHA256SUMS.txt', downloads: 12 } } })
-  ]) {
-    await writeFile(path, invalid);
-    await assert.rejects(createDownloadStore({ dataDir }), /Invalid or unreadable PurpleRay download ledger/);
-    assert.equal(await readFile(path, 'utf8'), invalid);
+test('can initialize without options and rejects invalid refresh intervals', async () => {
+  const store = await createDownloadStore();
+  assert.deepEqual(store.snapshot(), { downloads: null, metric: 'package_downloads', updatedAt: null, stale: true });
+  await store.close();
+  for (const refreshMs of [0, -1, Infinity, NaN, 1.5]) {
+    await assert.rejects(createDownloadStore({ refreshMs }), /positive download refresh interval/);
   }
 });
