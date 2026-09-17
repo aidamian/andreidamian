@@ -1,3 +1,26 @@
+Entrepreneurship and research update: local validation, 17 September 2026
+
+The homepage now includes the venture history, Lummetry's 2021 acquisition,
+the later Hyperfy rebrand and MotionMask launch, and the investor's reported
+2024 AI-security deployment figure. Two 2026 journal papers and the published
+2025 IEEE Ratio1 conference paper were added. The conference paper and arXiv
+whitepaper have separate citations and publication labels. The source audit,
+including all six supplied acquisition articles and unresolved historical
+details, is in [profile-sources.md](profile-sources.md).
+
+All 32 existing automated tests pass. Chromium checks passed on both pages at
+1440, 900, 760, 390, and 320 pixels, with no horizontal overflow, broken images,
+missing internal anchor targets, duplicate IDs, or JavaScript exceptions.
+The homepage has six research citations and three education entries. All
+three new DOI links are present. Homepage content, research links, section
+navigation, and the responding node's identity also work with JavaScript
+disabled. A long preview node alias wraps on mobile. Desktop and mobile
+screenshots were inspected, including the entrepreneurship section.
+
+These checks used the local production server entry point. No dependencies,
+deployment configuration, or server behavior changed. `git diff --check`
+passed. The profile update is local; it has not been pushed or verified in WAR.
+
 Platform download options: local validation, 17 September 2026
 
 All 32 automated tests pass. The release catalog uses GitHub's designated latest

@@ -105,7 +105,7 @@ h3 { font-size: 1.13rem; font-weight: 600; line-height: 1.4; }
 .profile-portrait figcaption { margin-top: 1.5rem; color: var(--muted); font-size: 0.76rem; text-align: center; }
 .section-block { padding-block: 4.5rem; border-top: 1px solid var(--line); }
 .section-heading { margin-bottom: 2.7rem; }
-.section-heading .eyebrow, .background-grid .eyebrow { margin-bottom: 0.85rem; }
+.section-heading .eyebrow { margin-bottom: 0.85rem; }
 .role-list { border-top: 1px solid var(--line); }
 .role {
   display: grid;
@@ -120,6 +120,11 @@ h3 { font-size: 1.13rem; font-weight: 600; line-height: 1.4; }
 .role h3 a, .publication-list h3 a { text-decoration: none; }
 .role h3 a:hover, .publication-list h3 a:hover { text-decoration: underline; }
 .role div p { max-width: 42rem; margin-top: 0.5rem; color: var(--muted); font-size: 0.94rem; }
+.source-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; margin-top: 1rem; }
+.source-links a { color: var(--purple); font-size: 0.79rem; }
+.venture-outcome { margin-top: 1.5rem; padding: 0.2rem 0 0.2rem 1.2rem; border-left: 2px solid #c7b7dc; }
+.venture-outcome h4 { margin: 0; font-size: 0.9rem; font-weight: 600; }
+.role .venture-outcome p { font-size: 0.88rem; }
 .project-feature {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 190px;
@@ -178,12 +183,9 @@ h3 { font-size: 1.13rem; font-weight: 600; line-height: 1.4; }
 .publication-list li:first-child { padding-top: 0; }
 .publication-list h3 { font-size: 1.06rem; font-weight: 500; }
 .publication-list p { margin-top: 0.45rem; color: var(--muted); font-size: 0.84rem; }
-.background-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
-.background-grid h2 { font-size: 2.25rem; }
-.background-entry { margin-top: 2rem; }
+.education-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem; }
 .background-entry h3 { margin-top: 0.3rem; font-size: 0.98rem; }
-.background-entry p, .earlier-work { margin-top: 0.5rem; color: var(--muted); font-size: 0.9rem; }
-.earlier-work { margin-top: 2rem; }
+.background-entry p { margin-top: 0.5rem; color: var(--muted); font-size: 0.9rem; }
 .site-footer { padding-block: 2rem 1.5rem; border-top: 1px solid var(--line); }
 .footer-top, .footer-bottom { display: flex; align-items: baseline; justify-content: space-between; gap: 1.5rem; }
 .footer-top > p { font-size: 0.95rem; font-weight: 600; }
@@ -264,7 +266,6 @@ h3 { font-size: 1.13rem; font-weight: 600; line-height: 1.4; }
 @media (max-width: 1000px) {
   .profile-hero { grid-template-columns: minmax(0, 1fr) 230px; gap: 3rem; }
   .role { grid-template-columns: 120px minmax(0, 1fr) 100px; gap: 1.5rem; }
-  .background-grid { gap: 3rem; }
   .project-feature { gap: 2.5rem; padding: 2.5rem; }
   .download-panel { padding: 2.5rem; }
   .platform-download { padding: 1rem; }
@@ -291,8 +292,7 @@ h3 { font-size: 1.13rem; font-weight: 600; line-height: 1.4; }
   .project-feature { grid-template-columns: minmax(0, 1fr) 115px; gap: 1.5rem; margin-bottom: 3.2rem; padding: 2rem; }
   .project-monogram { width: 105px; height: 105px; font-size: 3.5rem; }
   .project-feature h2 { font-size: 3rem; }
-  .background-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .background-grid > div + div { padding-top: 3rem; border-top: 1px solid var(--line); }
+  .education-grid { grid-template-columns: 1fr; gap: 2rem; }
   .publication-list li { grid-template-columns: 40px minmax(0, 1fr); gap: 1rem; }
   .product-hero { padding-top: 4rem; }
   .product-overview { margin-bottom: 3.2rem; }

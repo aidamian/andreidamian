@@ -18,6 +18,8 @@ WAR take precedence.
 
 See [local validation results](docs/validation.md) for the test coverage,
 desktop/mobile review, and checks under MICRO CPU and memory limits.
+The [profile source audit](docs/profile-sources.md) records the entrepreneurship
+history, Lummetry acquisition, subsequent Hyperfy developments, and verified publications.
 
 The existing WAR job is job 69, with replicas on `bia1` and `bia2` and its domains
 already configured. The 17 September inspection found both replicas launching

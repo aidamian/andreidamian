@@ -9,7 +9,7 @@
 
 ## Content and verification
 
-- Keep profile claims aligned with the CV sources recorded in `docs/migration-proposal.md`.
+- Keep profile claims aligned with the CV sources recorded in `docs/migration-proposal.md` and the company/publication audit in `docs/profile-sources.md`. Distinguish role tenure, acquisition dates, later group outcomes, and publication status; do not infer personal authorship of an acquiring group's products.
 - Ground PurpleRay descriptions and screenshot captions in its public repository. Offer direct platform packages discovered from published GitHub release assets, retaining the permanent `releases/latest` link as a fallback. Identify older packages as archives and show the macOS build pause when no current package exists.
 - Count current GitHub application-package downloads across all published releases, including prereleases. GitHub is the source of truth; refresh hourly in memory on each replica. Deleted assets may reduce the total. Do not describe downloads as unique users or an immutable lifetime count.
 - Run focused server/counter tests for behavior changes. Check both pages at desktop and mobile sizes after visual changes, including long node names, screenshot captions, and unavailable statistics.
