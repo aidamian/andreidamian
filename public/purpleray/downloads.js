@@ -26,7 +26,7 @@ export function renderReleaseOptions(snapshot) {
       : releases ? 'No published package available.' : 'Check the latest release on GitHub.';
     const architecture = [...new Set(assets.map(asset => asset.architecture).filter(Boolean))].join(', ');
     const detail = paused ? 'Builds temporarily paused.'
-      : key === 'linux' ? `${architecture ? `${escapeHTML(architecture)} · ` : ''}Requires GTK2. WSL2 supported with WSLg.`
+      : key === 'linux' ? `${architecture ? `${escapeHTML(architecture)} · ` : ''}Requires glibc 2.34+ and GTK2. WSL2 supported with WSLg.`
       : key === 'windows' ? `${architecture ? `${escapeHTML(architecture)} · ` : ''}Extract the ZIP to get started.`
       : 'Download the published macOS package.';
     const links = assets.length ? assets.map(asset => {
@@ -48,7 +48,7 @@ export function releaseStatus(snapshot) {
   if (!snapshot?.releases) return 'Package links are available on GitHub while release information loads.';
   return snapshot.stale
     ? 'Showing the last available package links. The latest refresh is delayed.'
-    : 'Published GitHub packages. Older builds are marked as archives.';
+    : 'Package links refresh hourly. Reload this page to see updates. Older builds are marked as archives.';
 }
 
 if (typeof document !== 'undefined') (() => {
