@@ -35,6 +35,30 @@ test('both homepage URLs render the WAR node, without caching or leaking other e
   }
 });
 
+test('both pages and response headers identify the same site release as the uncached health endpoint', async (t) => {
+  const base = await startServer(t);
+  const health = await fetch(`${base}/healthz`);
+  const { status, version, revision } = await health.json();
+  assert.equal(status, 'ok');
+  assert.match(version, /^\d+\.\d+\.\d+/);
+  assert.ok(revision === null || /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/.test(revision));
+  assert.equal(health.headers.get('cache-control'), 'no-store');
+
+  for (const path of ['/', '/index.html', '/purpleray']) {
+    const response = await fetch(`${base}${path}`);
+    const html = await response.text();
+    assert.equal(response.headers.get('x-site-version'), version);
+    assert.equal(response.headers.get('x-site-revision'), revision);
+    assert.ok(html.includes(`class="site-version">Site v${version} · `));
+    if (revision) {
+      assert.ok(html.includes(`title="Git commit ${revision}">commit ${revision.slice(0, 12)}</span>`));
+    } else {
+      assert.match(html, /revision unavailable/);
+    }
+    assert.doesNotMatch(html, /<!-- SITE_VERSION -->|Site version unavailable/);
+  }
+});
+
 test('PurpleRay has its own content and all aliases redirect to its canonical URL', async (t) => {
   const base = await startServer(t);
   const html = await (await fetch(`${base}/purpleray`)).text();
@@ -190,7 +214,7 @@ test('serves public assets and health but keeps repository files private and unk
 
   const health = await fetch(`${base}/healthz`);
   assert.equal(health.status, 200);
-  assert.deepEqual(await health.json(), { status: 'ok' });
+  assert.equal((await health.json()).status, 'ok');
 
   for (const path of ['/missing-page', '/server.mjs', '/package.json', '/.env', '/%2e%2e%2fpackage.json']) {
     const response = await fetch(`${base}${path}`);

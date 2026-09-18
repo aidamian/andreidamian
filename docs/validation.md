@@ -1,3 +1,21 @@
+Site release identification: local validation, 18 September 2026
+
+Both footers display website version 1.1.0 and the startup checkout's short
+Git revision. `/healthz` exposes the version and full revision, and responses
+include matching version headers. The version comes from `package.json`;
+Git metadata is read without subprocesses, writes, or extra dependencies.
+
+All 35 tests pass, including loose and packed refs, detached HEAD, missing or
+malformed Git metadata, consistent page/health/header values, and the existing
+WAR startup test with subprocesses and filesystem writes denied. Chromium
+checks passed on both pages at 1440, 760, 520, 390, and 320 pixels with JavaScript
+enabled and disabled: 20 combinations. Release labels matched the response
+revision, node attribution remained visible, and neither page overflowed.
+Desktop and mobile footer screenshots were inspected. `git diff --check` passed.
+
+This change is local and ready to publish. Local uncommitted edits retain the
+checkout's current HEAD; the next deployed commit will supply its own revision.
+
 Entrepreneurship and research update: local validation, 17 September 2026
 
 The homepage now includes the venture history, Lummetry's 2021 acquisition,

@@ -69,11 +69,16 @@ test('WAR starts and serves a complete counter without DATA_DIR or filesystem wr
   const base = `http://127.0.0.1:${port}`;
   const health = await fetch(`${base}/healthz`);
   assert.equal(health.status, 200);
-  assert.deepEqual(await health.json(), { status: 'ok' });
+  const release = await health.json();
+  assert.equal(release.status, 'ok');
+  assert.match(release.version, /^\d+\.\d+\.\d+/);
   for (const path of ['/', '/purpleray']) {
     const response = await fetch(`${base}${path}`);
     assert.equal(response.headers.get('cache-control'), 'no-store');
-    assert.match(await response.text(), /class="node-name">test-war-node<\/span>/);
+    const html = await response.text();
+    assert.match(html, /class="node-name">test-war-node<\/span>/);
+    assert.ok(html.includes(`Site v${release.version} · `));
+    assert.equal(response.headers.get('x-site-revision'), release.revision);
   }
   const stats = await (await fetch(`${base}/api/purpleray/downloads`)).json();
   assert.equal(stats.downloads, 7);

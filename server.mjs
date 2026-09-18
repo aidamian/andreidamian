@@ -4,6 +4,7 @@ import { posix } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import express from 'express';
 import { renderNodeAttribution } from './lib/ratio1-node.mjs';
+import { readSiteVersion, renderSiteVersion } from './lib/site-version.mjs';
 import { renderReleaseOptions, releaseStatus } from './public/purpleray/downloads.js';
 
 const publicDirectory = fileURLToPath(new URL('./public/', import.meta.url));
@@ -19,6 +20,7 @@ const unavailableDownloads = {
 
 export async function createApp(env = process.env, { downloadStore } = {}) {
   const app = express();
+  const siteVersion = await readSiteVersion();
   const assets = await Promise.all(['/styles.css', '/purpleray/downloads.js'].map(async (path) => {
     const contents = await readFile(new URL(`./public${path}`, import.meta.url));
     const version = createHash('sha256').update(contents).digest('hex').slice(0, 16);
@@ -31,6 +33,8 @@ export async function createApp(env = process.env, { downloadStore } = {}) {
     for (const [path, versioned] of assets) {
       template = template.replaceAll(`"${path}"`, `"${versioned}"`);
     }
+    template = template.replace(/<!-- SITE_VERSION -->[\s\S]*?<!-- \/SITE_VERSION -->/,
+      () => renderSiteVersion(siteVersion));
     return [route, template.replace(
       /<!-- RATIO1_NODE -->[\s\S]*?<!-- \/RATIO1_NODE -->/,
       () => renderNodeAttribution(env)
@@ -41,6 +45,8 @@ export async function createApp(env = process.env, { downloadStore } = {}) {
   app.use((_request, response, next) => {
     response.set('X-Content-Type-Options', 'nosniff');
     response.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    response.set('X-Site-Version', siteVersion.version);
+    if (siteVersion.revision) response.set('X-Site-Revision', siteVersion.revision);
     next();
   });
 
@@ -89,7 +95,7 @@ export async function createApp(env = process.env, { downloadStore } = {}) {
   });
 
   app.get('/healthz', (_request, response) => {
-    response.set('Cache-Control', 'no-store').json({ status: 'ok' });
+    response.set('Cache-Control', 'no-store').json({ status: 'ok', ...siteVersion });
   });
 
   app.use(express.static(publicDirectory, {

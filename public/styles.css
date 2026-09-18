@@ -194,6 +194,7 @@ h3 { font-size: 1.13rem; font-weight: 600; line-height: 1.4; }
 .footer-links a:hover { text-decoration: underline; }
 .footer-bottom { align-items: flex-start; margin-top: 1.2rem; color: var(--muted); font-size: 0.7rem; }
 .footer-bottom > p:first-child { flex-shrink: 0; }
+.site-version { display: block; margin-top: 0.3rem; }
 .node-attribution { max-width: 65%; text-align: right; overflow-wrap: anywhere; }
 .node-name { font-weight: 600; }
 

@@ -81,6 +81,22 @@ The server adds content versions to stylesheet and counter-script URLs, so an
 update bypasses older browser and Cloudflare cache entries automatically.
 [WAR environment fields](https://github.com/Ratio1/edge_node/blob/main/extensions/business/container_apps/container_utils.py).
 
+Both footers also display the website release, for example
+`Site v1.1.0 · commit abcdef123456`. The release number comes from `package.json`;
+the commit comes from the running checkout, read once at startup. WAR supplies
+the checkout automatically, so no new environment variables are needed.
+`GET /healthz` returns `status`, `version`, and the full `revision` for rollout
+checks; responses also include `X-Site-Version` and, when available,
+`X-Site-Revision`. A source export without Git metadata still shows the release
+number, with `revision unavailable` and a JSON `revision` of `null`.
+Compare replicas through `/healthz` or HTML; cached assets may retain old headers.
+The revision identifies committed code; local uncommitted edits keep the
+checkout's HEAD identifier. Bump the site release before publishing with
+`npm version patch --no-git-tag-version`, which updates both package files.
+The commit identifier changes automatically with each deployed commit, even
+when the release number stays the same. This is the website version, separate
+from PurpleRay's downloadable application versions.
+
 PurpleRay offers Windows, Linux, and macOS download options. Package links and
 versions come from published GitHub assets and refresh with the hourly cache;
 they do not follow unreleased changes in the source repository. Windows ZIPs,

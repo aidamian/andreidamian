@@ -14,6 +14,7 @@
 - Count current GitHub application-package downloads across all published releases, including prereleases. GitHub is the source of truth; refresh hourly in memory on each replica. Deleted assets may reduce the total. Do not describe downloads as unique users or an immutable lifetime count.
 - Run focused server/counter tests for behavior changes. Check both pages at desktop and mobile sizes after visual changes, including long node names, screenshot captions, and unavailable statistics.
 - HTML includes the responding node's escaped runtime identity and must remain uncached. Do not let static-file routes bypass HTML rendering.
+- Bump the website release in `package.json` and `package-lock.json` for publishable changes (`npm version patch --no-git-tag-version`). The server renders that version and the startup checkout revision in both footers and `/healthz`; keep this separate from PurpleRay application release versions.
 
 ## Deployment
 
