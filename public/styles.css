@@ -25,7 +25,7 @@ body {
 ::selection { color: var(--ink); background: #ddd3ed; }
 a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 a:hover { color: var(--purple); }
-a:focus-visible { outline: 3px solid var(--purple); outline-offset: 5px; }
+a:focus-visible, button:focus-visible, summary:focus-visible, textarea:focus-visible { outline: 3px solid var(--purple); outline-offset: 5px; }
 img { display: block; max-width: 100%; height: auto; }
 figure, p, h1, h2, h3 { margin: 0; }
 h1, h2, h3 { font-weight: 500; }
@@ -183,6 +183,36 @@ h3 { font-size: 1.13rem; font-weight: 600; line-height: 1.4; }
 .publication-list li:first-child { padding-top: 0; }
 .publication-list h3 { font-size: 1.06rem; font-weight: 500; }
 .publication-list p { margin-top: 0.45rem; color: var(--muted); font-size: 0.84rem; }
+.publication-list .publication-authors { font-size: 0.78rem; }
+.citation { margin-top: 0.9rem; min-width: 0; }
+.citation-toggle, .citation-copy {
+  width: fit-content;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #c8c3cf;
+  border-radius: 3px;
+  color: var(--purple);
+  background: transparent;
+  font: 600 0.78rem/1.5 var(--sans);
+  cursor: pointer;
+}
+.citation-toggle:hover, .citation-copy:hover { background: var(--lavender); border-color: var(--purple); }
+.citation-panel { margin-top: 0.8rem; padding: 1rem; border: 1px solid var(--line); border-radius: 3px; }
+.citation-panel textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  color: var(--ink);
+  background: white;
+  font: 0.75rem/1.6 ui-monospace, monospace;
+  resize: vertical;
+}
+.citation-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem 1.2rem; margin-top: 0.8rem; }
+.citation-copy[hidden] { display: none; }
+.citation-copy:disabled { opacity: 0.6; cursor: wait; }
+.citation-status:empty { display: none; }
 .education-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem; }
 .background-entry h3 { margin-top: 0.3rem; font-size: 0.98rem; }
 .background-entry p { margin-top: 0.5rem; color: var(--muted); font-size: 0.9rem; }

@@ -1,5 +1,8 @@
+# Public content is open to search, AI retrieval, and training crawlers.
+# This includes Googlebot, bingbot, OAI-SearchBot, GPTBot, ClaudeBot,
+# Claude-SearchBot, PerplexityBot, Google-Extended, and CCBot.
 User-agent: *
-Allow: /
 Disallow: /api/
+Allow: /
 
 Sitemap: https://andreidamian.ro/sitemap.xml

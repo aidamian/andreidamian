@@ -20,12 +20,40 @@ See [local validation results](docs/validation.md) for the test coverage,
 desktop/mobile review, and checks under MICRO CPU and memory limits.
 The [profile source audit](docs/profile-sources.md) records the entrepreneurship
 history, Lummetry acquisition, subsequent Hyperfy developments, and verified publications.
+See [search and AI crawler guidance](docs/search-ai-guidance.md) for provider
+controls and account-side checks, and [research evidence](docs/search-research-notes.md)
+for the scope and limits of SEO/GEO recommendations.
+
+Publication records live in [data/publications.json](data/publications.json).
+The server uses this one collection for the visible research list, scholarly
+JSON-LD, each `/publications/<id>.bib` download, and `/publications.bib`.
+Each reference has a native BibTeX disclosure; copying is enhanced with a small
+script, while selecting text and downloading citations work without JavaScript.
+Bibliographic APIs are not called at startup or on page requests. The
+[bibliography audit](docs/bibliography-sources.md) records the verified sources.
+
+Both pages serve canonical metadata and structured data in their initial HTML.
+Profile identity, author links, publications, and PurpleRay's software/source
+metadata describe visible content. `/index.html` aliases and the `www` hostname
+redirect permanently to their canonical URLs. Operational endpoints carry
+`noindex`; `/api/` also remains excluded from crawling. Public pages, citations,
+and assets are open to search and AI crawlers. `/llms.txt` is a small navigation
+index generated from the publication collection, not a ranking or training
+mechanism. It is identical for human and crawler requests.
+
+Keep sitemap `lastmod` dates aligned with substantive page updates; do not
+refresh them automatically on every request, restart, or documentation commit.
+After publishing, submit `https://andreidamian.ro/sitemap.xml` in Google Search
+Console and Bing Webmaster Tools and inspect both canonical page URLs. Verify
+Search Console's effective **Settings → Search generative AI → Include** choice
+and Cloudflare's Search, Agent, and Training policies. Details and current
+official sources are in the linked crawler guidance. These account settings
+have not been verified through authenticated access; public HTTP checks cannot
+prove indexing, verified-bot access, ranking, or model-training inclusion.
 
 The existing WAR job is job 69, with replicas on `bia1` and `bia2` and its domains
-already configured. The 17 September inspection found both replicas launching
-`npx serve`; pushing new files alone does not change that command. After
-publishing the new server code to the watched branch, update the existing job
-with these settings:
+already configured. Keep the job configuration when publishing content or
+citation updates. The required application settings are:
 
 | Setting | Value |
 | --- | --- |

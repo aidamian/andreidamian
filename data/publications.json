@@ -1,0 +1,267 @@
+[
+  {
+    "id": "edgeguard-threat-analytics-2026",
+    "title": "Time-Series and Social-Media Threat Analytics over a Deployed Cyber-Threat Knowledge Graph",
+    "authors": [
+      {
+        "given": "Kalin",
+        "family": "Kopanov",
+        "orcid": "https://orcid.org/0009-0001-8725-2643"
+      },
+      {
+        "given": "Kristina",
+        "family": "Dineva",
+        "orcid": "https://orcid.org/0000-0001-9050-0348"
+      },
+      {
+        "given": "Ivaylo",
+        "family": "Keremidarski",
+        "orcid": "https://orcid.org/0009-0006-2476-9780"
+      },
+      {
+        "given": "Velizar",
+        "family": "Varbanov",
+        "orcid": "https://orcid.org/0009-0007-9762-7924"
+      },
+      {
+        "given": "Vitalii",
+        "family": "Toderian",
+        "orcid": "https://orcid.org/0009-0006-1570-2613"
+      },
+      {
+        "given": "Petrica",
+        "family": "Butusina",
+        "orcid": "https://orcid.org/0009-0002-9164-4559"
+      },
+      {
+        "given": "Andrei Ionut",
+        "family": "Damian",
+        "orcid": "https://orcid.org/0000-0002-5294-6223"
+      }
+    ],
+    "year": 2026,
+    "datePublished": "2026-08-19",
+    "url": "https://doi.org/10.3390/info17080794",
+    "doi": "10.3390/info17080794",
+    "type": "journal-article",
+    "venue": "Information",
+    "description": "Threat intelligence and the EdgeGuard knowledge graph",
+    "bibtexKey": "Kopanov2026EdgeGuard",
+    "volume": "17",
+    "issue": "8",
+    "articleNumber": "794",
+    "bibtex": "@article{Kopanov2026EdgeGuard,\n  author = {Kopanov, Kalin and Dineva, Kristina and Keremidarski, Ivaylo and Varbanov, Velizar and Toderian, Vitalii and Butusina, Petrica and Damian, Andrei Ionut},\n  title = {{Time-Series and Social-Media Threat Analytics over a Deployed Cyber-Threat Knowledge Graph}},\n  journal = {Information},\n  year = {2026},\n  month = {August},\n  volume = {17},\n  number = {8},\n  pages = {794},\n  doi = {10.3390/info17080794},\n  url = {https://doi.org/10.3390/info17080794}\n}\n"
+  },
+  {
+    "id": "clinical-ai-governance-2026",
+    "title": "Blockchain-Enabled Trust and Compliance for Clinical AI: Decentralized Governance Without Decentralized Data Storage",
+    "authors": [
+      {
+        "given": "Dimitrios P.",
+        "family": "Panagoulias",
+        "orcid": "https://orcid.org/0000-0002-9421-141X"
+      },
+      {
+        "given": "Andrei Ionut",
+        "family": "Damian",
+        "orcid": "https://orcid.org/0000-0002-5294-6223"
+      },
+      {
+        "given": "Cosmin",
+        "family": "Stamate"
+      },
+      {
+        "given": "Vitalii",
+        "family": "Toderian"
+      },
+      {
+        "given": "Petrica",
+        "family": "Butusina",
+        "orcid": "https://orcid.org/0009-0002-9164-4559"
+      },
+      {
+        "given": "Alessandro",
+        "family": "De Franceschi"
+      },
+      {
+        "given": "Cristian",
+        "family": "Bleotiu"
+      },
+      {
+        "given": "Evangelos",
+        "family": "Sakkopoulos",
+        "orcid": "https://orcid.org/0000-0002-6852-384X"
+      },
+      {
+        "given": "Evangelia-Aikaterini",
+        "family": "Tsichrintzi"
+      }
+    ],
+    "year": 2026,
+    "datePublished": "2026-07-10",
+    "url": "https://doi.org/10.3390/electronics15143046",
+    "doi": "10.3390/electronics15143046",
+    "type": "journal-article",
+    "venue": "Electronics",
+    "description": "Consent, provenance, and audit trails for clinical AI",
+    "bibtexKey": "Panagoulias2026ClinicalAI",
+    "volume": "15",
+    "issue": "14",
+    "articleNumber": "3046",
+    "bibtex": "@article{Panagoulias2026ClinicalAI,\n  author = {Panagoulias, Dimitrios P. and Damian, Andrei Ionut and Stamate, Cosmin and Toderian, Vitalii and Butusina, Petrica and De Franceschi, Alessandro and Bleotiu, Cristian and Sakkopoulos, Evangelos and Tsichrintzi, Evangelia-Aikaterini},\n  title = {{Blockchain-Enabled Trust and Compliance for Clinical AI: Decentralized Governance Without Decentralized Data Storage}},\n  journal = {Electronics},\n  year = {2026},\n  month = {July},\n  volume = {15},\n  number = {14},\n  pages = {3046},\n  doi = {10.3390/electronics15143046},\n  url = {https://doi.org/10.3390/electronics15143046}\n}\n"
+  },
+  {
+    "id": "ratio1-meta-os-cscs-2025",
+    "title": "Ratio1 meta-OS - decentralized MLOps and beyond",
+    "authors": [
+      {
+        "given": "Andrei Ionut",
+        "family": "Damian",
+        "orcid": "https://orcid.org/0000-0002-5294-6223"
+      },
+      {
+        "given": "Cristian",
+        "family": "Bleotiu"
+      },
+      {
+        "given": "Marius",
+        "family": "Grigoras"
+      },
+      {
+        "given": "Petrica",
+        "family": "Butusina"
+      },
+      {
+        "given": "Alessandro",
+        "family": "De Franceschi"
+      },
+      {
+        "given": "Vitalii",
+        "family": "Toderian"
+      },
+      {
+        "given": "Nicolae",
+        "family": "Tapus"
+      }
+    ],
+    "year": 2025,
+    "datePublished": "2025-05-27",
+    "url": "https://doi.org/10.1109/CSCS66924.2025.00046",
+    "doi": "10.1109/CSCS66924.2025.00046",
+    "type": "conference-paper",
+    "venue": "2025 25th International Conference on Control Systems and Computer Science (CSCS)",
+    "description": "Cooperative AI execution and decentralized MLOps",
+    "bibtexKey": "Damian2025Ratio1CSCS",
+    "pages": "258-265",
+    "bibtex": "@inproceedings{Damian2025Ratio1CSCS,\n  author = {Damian, Andrei Ionut and Bleotiu, Cristian and Grigoras, Marius and Butusina, Petrica and De Franceschi, Alessandro and Toderian, Vitalii and Tapus, Nicolae},\n  title = {{Ratio1 meta-OS - decentralized MLOps and beyond}},\n  booktitle = {2025 25th International Conference on Control Systems and Computer Science (CSCS)},\n  year = {2025},\n  month = {May},\n  pages = {258--265},\n  publisher = {IEEE},\n  doi = {10.1109/CSCS66924.2025.00046},\n  url = {https://doi.org/10.1109/CSCS66924.2025.00046}\n}\n"
+  },
+  {
+    "id": "ratio1-ai-meta-os-2025",
+    "title": "Ratio1 -- AI meta-OS",
+    "authors": [
+      {
+        "given": "Andrei",
+        "family": "Damian",
+        "orcid": "https://orcid.org/0000-0002-5294-6223"
+      },
+      {
+        "given": "Petrica",
+        "family": "Butusina"
+      },
+      {
+        "given": "Alessandro",
+        "family": "De Franceschi"
+      },
+      {
+        "given": "Vitalii",
+        "family": "Toderian"
+      },
+      {
+        "given": "Marius",
+        "family": "Grigoras"
+      },
+      {
+        "given": "Cristian",
+        "family": "Bleotiu"
+      }
+    ],
+    "year": 2025,
+    "datePublished": "2025-09-05",
+    "url": "https://arxiv.org/abs/2509.12223",
+    "doi": "10.48550/arXiv.2509.12223",
+    "type": "preprint",
+    "venue": "arXiv",
+    "description": "Decentralized infrastructure for the AI lifecycle",
+    "bibtexKey": "Damian2025Ratio1",
+    "arxivId": "2509.12223",
+    "bibtex": "@misc{Damian2025Ratio1,\n  author = {Damian, Andrei and Butusina, Petrica and De Franceschi, Alessandro and Toderian, Vitalii and Grigoras, Marius and Bleotiu, Cristian},\n  title = {{Ratio1 -- AI meta-OS}},\n  year = {2025},\n  month = {September},\n  eprint = {2509.12223},\n  archivePrefix = {arXiv},\n  primaryClass = {cs.OS},\n  note = {Preprint},\n  doi = {10.48550/arXiv.2509.12223},\n  url = {https://arxiv.org/abs/2509.12223}\n}\n"
+  },
+  {
+    "id": "solis-mlops-2021",
+    "title": "SOLIS -- The MLOps journey from data acquisition to actionable insights",
+    "authors": [
+      {
+        "given": "Razvan",
+        "family": "Ciobanu"
+      },
+      {
+        "given": "Alexandru",
+        "family": "Purdila"
+      },
+      {
+        "given": "Laurentiu",
+        "family": "Piciu"
+      },
+      {
+        "given": "Andrei",
+        "family": "Damian",
+        "orcid": "https://orcid.org/0000-0002-5294-6223"
+      }
+    ],
+    "year": 2021,
+    "datePublished": "2021-12-22",
+    "dateModified": "2022-01-28",
+    "url": "https://arxiv.org/abs/2112.11925",
+    "doi": "10.48550/arXiv.2112.11925",
+    "type": "preprint",
+    "venue": "arXiv",
+    "description": "From data collection to deployed AI systems",
+    "bibtexKey": "Ciobanu2021SOLIS",
+    "arxivId": "2112.11925",
+    "bibtex": "@misc{Ciobanu2021SOLIS,\n  author = {Ciobanu, Razvan and Purdila, Alexandru and Piciu, Laurentiu and Damian, Andrei},\n  title = {{SOLIS -- The MLOps journey from data acquisition to actionable insights}},\n  year = {2021},\n  month = {December},\n  eprint = {2112.11925},\n  archivePrefix = {arXiv},\n  primaryClass = {cs.LG},\n  note = {Preprint; first submitted 22 December 2021, revised 28 January 2022},\n  doi = {10.48550/arXiv.2112.11925},\n  url = {https://arxiv.org/abs/2112.11925}\n}\n"
+  },
+  {
+    "id": "cloudifiernet-2019",
+    "title": "CloudifierNet - Deep Vision Models for Artificial Image Processing",
+    "authors": [
+      {
+        "given": "Andrei Ionut",
+        "family": "Damian",
+        "orcid": "https://orcid.org/0000-0002-5294-6223"
+      },
+      {
+        "given": "Laurentiu",
+        "family": "Piciu"
+      },
+      {
+        "given": "Alexandru",
+        "family": "Purdila"
+      },
+      {
+        "given": "Nicolae",
+        "family": "Tapus"
+      }
+    ],
+    "year": 2019,
+    "datePublished": "2019",
+    "url": "https://doi.org/10.1016/j.procs.2019.12.043",
+    "doi": "10.1016/j.procs.2019.12.043",
+    "type": "journal-article",
+    "venue": "Procedia Computer Science",
+    "description": "Computer vision for artificial images",
+    "bibtexKey": "Damian2019CloudifierNet",
+    "volume": "162",
+    "pages": "720-728",
+    "bibtex": "@article{Damian2019CloudifierNet,\n  author = {Damian, Andrei Ionut and Piciu, Laurentiu and Purdila, Alexandru and Tapus, Nicolae},\n  title = {{CloudifierNet - Deep Vision Models for Artificial Image Processing}},\n  journal = {Procedia Computer Science},\n  year = {2019},\n  volume = {162},\n  pages = {720--728},\n  doi = {10.1016/j.procs.2019.12.043},\n  url = {https://doi.org/10.1016/j.procs.2019.12.043}\n}\n"
+  }
+]

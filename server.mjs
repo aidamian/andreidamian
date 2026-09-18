@@ -5,6 +5,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import express from 'express';
 import { renderNodeAttribution } from './lib/ratio1-node.mjs';
 import { readSiteVersion, renderSiteVersion } from './lib/site-version.mjs';
+import { publications, renderPublications, renderBibliography } from './lib/publications.mjs';
+import { siteOrigin, profileStructuredData, projectStructuredData, renderStructuredData, renderLlmsIndex } from './lib/structured-data.mjs';
 import { renderReleaseOptions, releaseStatus } from './public/purpleray/downloads.js';
 
 const publicDirectory = fileURLToPath(new URL('./public/', import.meta.url));
@@ -21,7 +23,7 @@ const unavailableDownloads = {
 export async function createApp(env = process.env, { downloadStore } = {}) {
   const app = express();
   const siteVersion = await readSiteVersion();
-  const assets = await Promise.all(['/styles.css', '/purpleray/downloads.js'].map(async (path) => {
+  const assets = await Promise.all(['/styles.css', '/citations.js', '/purpleray/downloads.js'].map(async (path) => {
     const contents = await readFile(new URL(`./public${path}`, import.meta.url));
     const version = createHash('sha256').update(contents).digest('hex').slice(0, 16);
     return [path, `${path}?v=${version}`];
@@ -35,6 +37,9 @@ export async function createApp(env = process.env, { downloadStore } = {}) {
     }
     template = template.replace(/<!-- SITE_VERSION -->[\s\S]*?<!-- \/SITE_VERSION -->/,
       () => renderSiteVersion(siteVersion));
+    template = template.replace('<!-- STRUCTURED_DATA -->', () => renderStructuredData(
+      route === '/' ? profileStructuredData() : projectStructuredData()));
+    if (route === '/') template = template.replace('<!-- PUBLICATIONS -->', () => renderPublications());
     return [route, template.replace(
       /<!-- RATIO1_NODE -->[\s\S]*?<!-- \/RATIO1_NODE -->/,
       () => renderNodeAttribution(env)
@@ -55,6 +60,10 @@ export async function createApp(env = process.env, { downloadStore } = {}) {
       return next();
     }
 
+    if (request.hostname?.toLowerCase() === 'www.andreidamian.ro') {
+      return response.set('Cache-Control', 'no-store').redirect(308, `${siteOrigin}${request.originalUrl}`);
+    }
+
     let pathname;
     try {
       pathname = posix.normalize(decodeURIComponent(request.path)).replace(/\/+$/, '') || '/';
@@ -68,9 +77,9 @@ export async function createApp(env = process.env, { downloadStore } = {}) {
     if (pathname === '/purpleray/index.html') {
       pathname = '/purpleray';
     }
-    if (pathname === '/purpleray' && request.path !== '/purpleray') {
+    if ((pathname === '/' || pathname === '/purpleray') && request.path !== pathname) {
       const query = request.originalUrl.includes('?') ? request.originalUrl.slice(request.originalUrl.indexOf('?')) : '';
-      return response.set('Cache-Control', 'no-store').redirect(308, `/purpleray${query}`);
+      return response.set('Cache-Control', 'no-store').redirect(308, `${pathname}${query}`);
     }
     if (pages.has(pathname)) {
       let html = pages.get(pathname);
@@ -91,11 +100,27 @@ export async function createApp(env = process.env, { downloadStore } = {}) {
   });
 
   app.get('/api/purpleray/downloads', (_request, response) => {
-    response.set('Cache-Control', 'no-store').json(downloadStore?.snapshot() || unavailableDownloads);
+    response.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' }).json(downloadStore?.snapshot() || unavailableDownloads);
   });
 
   app.get('/healthz', (_request, response) => {
-    response.set('Cache-Control', 'no-store').json({ status: 'ok', ...siteVersion });
+    response.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' }).json({ status: 'ok', ...siteVersion });
+  });
+
+  const bibliography = renderBibliography();
+  const llmsIndex = renderLlmsIndex();
+  app.get('/publications.bib', (_request, response) => {
+    response.set('Cache-Control', 'no-store').attachment('andrei-damian-publications.bib')
+      .type('application/x-bibtex').send(bibliography);
+  });
+  app.get('/publications/:id.bib', (request, response, next) => {
+    const publication = publications.find(item => item.id === request.params.id);
+    if (!publication) return next();
+    response.set('Cache-Control', 'no-store').attachment(`${publication.id}.bib`)
+      .type('application/x-bibtex').send(publication.bibtex);
+  });
+  app.get('/llms.txt', (_request, response) => {
+    response.set('Cache-Control', 'no-store').type('text/plain').send(llmsIndex);
   });
 
   app.use(express.static(publicDirectory, {
@@ -106,7 +131,7 @@ export async function createApp(env = process.env, { downloadStore } = {}) {
   }));
 
   app.use((_request, response) => {
-    response.set('Cache-Control', 'no-store').status(404).type('text').send('Not found');
+    response.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' }).status(404).type('text').send('Not found');
   });
 
   return app;

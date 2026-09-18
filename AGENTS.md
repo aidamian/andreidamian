@@ -10,6 +10,8 @@
 ## Content and verification
 
 - Keep profile claims aligned with the CV sources recorded in `docs/migration-proposal.md` and the company/publication audit in `docs/profile-sources.md`. Distinguish role tenure, acquisition dates, later group outcomes, and publication status; do not infer personal authorship of an acquiring group's products.
+- Edit selected publications in `data/publications.json`; it feeds the visible list, BibTeX downloads, structured data, and optional agent index. Verify citation fields against DOI/publisher/arXiv sources and preserve preprint status, author order, and date precision.
+- Keep metadata consistent with visible content, public crawl permission open, and substantive sitemap dates accurate. Do not add fabricated reviews or promise indexing, ranking, or training inclusion. Provider guidance and account-side checks are recorded in `docs/search-ai-guidance.md`.
 - Ground PurpleRay descriptions and screenshot captions in its public repository. Offer direct platform packages discovered from published GitHub release assets, retaining the permanent `releases/latest` link as a fallback. Identify older packages as archives and show the macOS build pause when no current package exists.
 - Count current GitHub application-package downloads across all published releases, including prereleases. GitHub is the source of truth; refresh hourly in memory on each replica. Deleted assets may reduce the total. Do not describe downloads as unique users or an immutable lifetime count.
 - Run focused server/counter tests for behavior changes. Check both pages at desktop and mobile sizes after visual changes, including long node names, screenshot captions, and unavailable statistics.
@@ -21,6 +23,7 @@
 - Ratio1 Worker App Runner clones the watched branch and runs `npm ci --omit=dev`, then `npm start`. `.github/workflows/checks.yml` runs checks only.
 - `deploy/war.example.json` is a plugin configuration fragment with placeholders, not a standalone deployment manifest. Preserve the existing job, tunnel, and domain configuration when updating the running site.
 - Keep the existing two replicas on `bia1` and `bia2` for job 69. Each uses MICRO resources: 0.25 CPU, 512 MiB RAM, and 2 GiB storage. No application volume or `DATA_DIR` is required; preserve WAR's `/r1en_system` mount and existing platform secrets.
+- `bia2` is in Singapore: use SSH `ConnectTimeout=120` and allow at least 300 seconds overall for remote diagnostics. Retry a connection timeout once before reporting SSH access unavailable; an SSH timeout alone does not establish that the node is offline. Run long checks with short tool yields so progress updates remain possible.
 - Set readiness to `/healthz` with a 300-second timeout and `ON_FAILURE=skip`. A timeout can leave the tunnel stopped; after fixing startup, restart the job to retry readiness.
 - Prefer `R1EN_HOST_ID` and `R1EN_HOST_ADDR`, with `EE_HOST_ID` and `EE_HOST_ADDR` fallbacks. Let WAR inject them. Never publish the whole environment or a private host IP.
 - Store Cloudflare, GitHub API, and VCS credentials in deployment secrets. `GITHUB_TOKEN` serves the application; `VCS_DATA.TOKEN` serves WAR's separate branch polling. Never commit their values.

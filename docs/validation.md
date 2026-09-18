@@ -1,3 +1,73 @@
+Live PurpleRay release check, 18 September 2026
+
+At 07:28–07:30 UTC, direct GitHub API and release-page requests identified
+v1.4.0 as the latest release, published at 07:16:51 UTC. The public site's
+snapshot had already refreshed at 07:21:30 UTC and supplied matching Windows
+ZIP, Linux tar.gz, and Debian package links. The macOS v0.1.0 ZIP remained
+correctly labelled as an experimental archive with builds paused.
+
+Direct HTML/API requests to the apex, www, and native WAR domain returned
+HTTP 200 with the latest links. Responses used `Cache-Control: no-store` and
+Cloudflare reported `DYNAMIC`. Chromium checks on the apex and www confirmed
+the same visible versions and download URLs after JavaScript completed, with
+no JavaScript exceptions. These public requests reached bia1, running website
+v1.1.0, commit 68c498141d4a; the website version is separate from PurpleRay's
+application release version.
+
+Direct SSH checks to bia2 timed out, so its independent cache could not be
+verified. No node was restarted or reconfigured during this investigation.
+
+No incorrect current package selection was reproduced. Each replica refreshes
+its in-memory snapshot hourly, checked by a minute timer, so a new release can
+normally take up to about 61 minutes to appear. An already-open browser tab
+fetches the snapshot only on initial load and needs reloading to see later
+updates. These mechanisms can explain a previously observed older release;
+the earlier browser state was not captured. No runtime change was made for
+this investigation.
+
+Search, AI access, and BibTeX: local validation, 18 September 2026
+
+Website version 1.1.1 adds server-rendered profile, publication, and software
+structured data; canonical redirects; richer social metadata; substantive
+sitemap update dates; and an optional generated `/llms.txt` navigation index.
+All six references now have a native BibTeX disclosure, a progressive copy
+button, and individual `.bib` downloads, plus a combined bibliography.
+
+All 44 automated tests pass. The nine added tests cover graph relationships,
+complete authors and publication status/date precision, citation downloads,
+GET/HEAD canonical redirects, public versus operational indexing headers,
+identical human/crawler responses, and JSON-LD escaping. The production startup
+test still passes with subprocesses and filesystem writes denied. No runtime
+dependencies were added.
+
+Chromium checks passed on both pages at 1440, 900, 760, 390, and 320 pixels.
+All six citations copied exactly to the clipboard at each width. A denied
+clipboard operation selected the full citation and displayed manual-copy
+instructions. Native disclosure, manual selection, and downloads also worked
+without JavaScript. Keyboard Enter/Space toggling, images, internal anchors,
+schema parsing, node/version footers, and absence of horizontal overflow or
+JavaScript errors were verified. Desktop and mobile screenshots were inspected.
+The bibliography was independently parsed and checked against canonical DOI
+exports; see [bibliography-sources.md](bibliography-sources.md).
+
+An additional Python robots check initially raised `AssertionError` because
+its standard-library parser chooses the first matching rule: `Allow: /` hid
+the subsequent `Disallow: /api/` from that parser. Google uses the most specific
+matching path instead. The specific exclusion was moved first to support both
+behaviours. All 11 tested crawler tokens then allowed public pages, scripts,
+and bibliography resources while excluding `/api/`. Sitemap XML contains exactly
+the two canonical pages and valid, nonfuture dates. The application continued
+serving HTTP 200 during that validation failure. This was a local check, not
+evidence of a production outage. [Google's rule precedence](https://developers.google.com/crawling/docs/robots-txt/robots-txt-spec).
+
+These are local implementation checks, not proof of search indexing or model
+training. The earlier live baseline and remaining account-side checks are in
+[search-ai-guidance.md](search-ai-guidance.md). JSON-LD was parsed and checked
+for consistency; no Google rich-result eligibility is claimed for PurpleRay,
+which has no fabricated ratings or reviews. No Cloudflare, Google, or Bing
+account settings were changed. This update has not been pushed or tested in WAR.
+`git diff --check` passed.
+
 Site release identification: local validation, 18 September 2026
 
 Both footers display website version 1.1.0 and the startup checkout's short
